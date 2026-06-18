@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Condicionales en Pantalla</title>
+    <style>
+        body { font-family: sans-serif; margin: 40px; }
+        .resultado { padding: 10px; background: #f0f0f0; margin-bottom: 10px; border-left: 5px solid #007bff; }
+    </style>
+</head>
+<body>
+
+    <h1>Resultados del Script:</h1>
+    
+    <div id="saludo-hora" class="resultado"></div>
+    <div id="saludo-nombre" class="resultado"></div>
+
+    <script>
+        // 1. Lógica de la hora
+        let hora = 14;
+        let mensajeHora = "";
+
+        if (hora < 12) {
+            mensajeHora = "Buenos días";
+        } else if (hora < 18) {
+            mensajeHora = "Buenas tardes"; 
+        } else {
+            mensajeHora = "Buenas noches";
+        }
+        
+        // Pintamos el resultado en el HTML
+        document.getElementById("saludo-hora").innerText = mensajeHora;
+
+        // 2. Lógica del nombre
+        let nombre = "Fernando";
+        if (nombre === "Fernando"){
+            // Pintamos el resultado en el HTML
+            document.getElementById("saludo-nombre").innerText = "Hola Fer";
+        }
+    </script>
+
+</body>
+</html>
