@@ -1,0 +1,44 @@
+function recorridoInorden(raiz) {
+    // CASO BASE: Si el nodo actual está vacío (null), retornamos un arreglo vacío.
+    if (raiz === null) {
+        return [];
+    }
+    
+    // CASO RECURSIVO: Visitamos la rama izquierda, luego guardamos la raíz, y luego la rama derecha.
+    // Usamos el operador spread (...) para aplanar los arreglos resultantes.
+    return [
+        ...recorridoInorden(raiz.izquierdo), 
+        raiz.valor, 
+        ...recorridoInorden(raiz.derecho)
+    ];
+}
+
+// 2. Preorden: Raíz -> Izquierdo -> Derecho
+function recorridoPreorden(raiz) {
+    // CASO BASE: Si el nodo actual está vacío (null), retornamos un arreglo vacío.
+    if (raiz === null) {
+        return [];
+    }
+    
+    // CASO RECURSIVO: Guardamos primero la raíz actual, luego visitamos la izquierda y al final la derecha.
+    return [
+        raiz.valor, 
+        ...recorridoPreorden(raiz.izquierdo), 
+        ...recorridoPreorden(raiz.derecho)
+    ];
+}
+
+// 3. Postorden: Izquierdo -> Derecho -> Raíz
+function recorridoPostorden(raiz) {
+    // CASO BASE: Si el nodo actual está vacío (null), retornamos un arreglo vacío.
+    if (raiz === null) {
+        return [];
+    }
+    
+    // CASO RECURSIVO: Visitamos la rama izquierda, luego la derecha, y dejamos la raíz actual al final.
+    return [
+        ...recorridoPostorden(raiz.izquierdo), 
+        ...recorridoPostorden(raiz.derecho), 
+        raiz.valor
+    ];
+}

@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FIFO vs LIFO — Gestión de Inventario</title>
+  <link rel="stylesheet" href="css/estilos.css" />
+</head>
+<body>
+
+  <p class="titulo">Inventario FIFO vs LIFO — Tienda Tecnológica</p>
+  <p class="subtitulo">Simulador didáctico para comparar ambos métodos de gestión de inventario</p>
+
+  <!-- ── Instrucciones ── -->
+  <div class="instrucciones">
+    <strong>¿Cómo usar este simulador?</strong><br>
+    1. Elige un producto, cuántas unidades compras y a qué precio de costo.<br>
+    2. Pulsa <strong>"Agregar lote"</strong> — el producto entra a la bodega de ambos métodos al mismo tiempo.<br>
+    3. Ingresa cuántas unidades quieres vender y pulsa <strong>"Vender"</strong>.<br>
+    &nbsp;&nbsp;&nbsp;→ <strong>FIFO</strong> despacha primero el lote más antiguo (el que llegó antes).<br>
+    &nbsp;&nbsp;&nbsp;→ <strong>LIFO</strong> despacha primero el lote más reciente (el que llegó después).<br>
+    4. Observa cómo el <strong>costo y la ganancia</strong> cambian según qué lote se vende primero.
+  </div>
+
+  <!-- ── Controles ── -->
+  <div class="controles">
+    <div class="ctrl">
+      <label for="sel-prod">Producto</label>
+      <select id="sel-prod">
+        <option>Auriculares BT</option>
+        <option>Laptop 15"</option>
+        <option>SSD 1TB</option>
+        <option>Cargador USB-C</option>
+        <option>Smartphone</option>
+      </select>
+    </div>
+
+    <div class="ctrl">
+      <label for="inp-qty">Unidades</label>
+      <input type="number" id="inp-qty" value="5" min="1" max="20" style="width: 70px;">
+    </div>
+
+    <div class="ctrl">
+      <label for="inp-costo">Costo c/u ($)</label>
+      <input type="number" id="inp-costo" value="45" min="1" style="width: 80px;">
+    </div>
+
+    <div class="ctrl">
+      <label for="inp-pvp">Precio venta ($)</label>
+      <input type="number" id="inp-pvp" value="65" min="1" style="width: 80px;">
+    </div>
+
+    <button class="btn btn-azul" onclick="agregarLote()">+ Agregar lote</button>
+
+    <div class="ctrl" style="margin-left: 8px;">
+      <label for="inp-vender">Vender unidades</label>
+      <input type="number" id="inp-vender" value="3" min="1" style="width: 70px;">
+    </div>
+
+    <button class="btn" onclick="vender()">Vender</button>
+    <button class="btn btn-rojo" onclick="reiniciar()" style="margin-left: auto;">Reiniciar</button>
+  </div>
+
+  <!-- ── Columnas FIFO / LIFO ── -->
+  <div class="columnas">
+
+    <!-- Panel FIFO -->
+    <div class="panel">
+      <div class="cab-fifo">
+        <div class="cab-titulo">FIFO — First In, First Out</div>
+        <div class="cab-sub">El primero en entrar es el primero en salir (como una fila)</div>
+      </div>
+      <div class="cuerpo">
+        <div class="etiqueta-bodega">Bodega (de más antiguo → más nuevo)</div>
+        <div class="bodega" id="fifo-bodega">
+          <div class="bodega-vacia">Sin stock. Agrega un lote.</div>
+        </div>
+        <div class="flecha-info" id="fifo-flecha">—</div>
+        <div class="nums">
+          <div class="num-caja">
+            <div class="num-label">Costo vendido</div>
+            <div class="num-val fifo-color" id="fifo-costo">$0</div>
+          </div>
+          <div class="num-caja">
+            <div class="num-label">Ingresos</div>
+            <div class="num-val fifo-color" id="fifo-ingresos">$0</div>
+          </div>
+          <div class="num-caja">
+            <div class="num-label">Ganancia neta</div>
+            <div class="num-val fifo-color" id="fifo-ganancia">$0</div>
+          </div>
+          <div class="num-caja">
+            <div class="num-label">Unidades vendidas</div>
+            <div class="num-val fifo-color" id="fifo-vendidas">0</div>
+          </div>
+        </div>
+        <div class="historial">
+          <div class="hist-titulo">Registro de movimientos</div>
+          <div class="hist-lista" id="fifo-log"></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Panel LIFO -->
+    <div class="panel">
+      <div class="cab-lifo">
+        <div class="cab-titulo">LIFO — Last In, First Out</div>
+        <div class="cab-sub">El último en entrar es el primero en salir (como una pila)</div>
+      </div>
+      <div class="cuerpo">
+        <div class="etiqueta-bodega">Bodega (tope ← más reciente)</div>
+        <div class="bodega" id="lifo-bodega">
+          <div class="bodega-vacia">Sin stock. Agrega un lote.</div>
+        </div>
+        <div class="flecha-info" id="lifo-flecha">—</div>
+        <div class="nums">
+          <div class="num-caja">
+            <div class="num-label">Costo vendido</div>
+            <div class="num-val lifo-color" id="lifo-costo">$0</div>
+          </div>
+          <div class="num-caja">
+            <div class="num-label">Ingresos</div>
+            <div class="num-val lifo-color" id="lifo-ingresos">$0</div>
+          </div>
+          <div class="num-caja">
+            <div class="num-label">Ganancia neta</div>
+            <div class="num-val lifo-color" id="lifo-ganancia">$0</div>
+          </div>
+          <div class="num-caja">
+            <div class="num-label">Unidades vendidas</div>
+            <div class="num-val lifo-color" id="lifo-vendidas">0</div>
+          </div>
+        </div>
+        <div class="historial">
+          <div class="hist-titulo">Registro de movimientos</div>
+          <div class="hist-lista" id="lifo-log"></div>
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── Tabla de resumen ── -->
+  <div class="resumen">
+    <div class="resumen-titulo">Comparación de resultados</div>
+    <table class="tabla-res">
+      <thead>
+        <tr>
+          <th style="text-align: left;">Concepto</th>
+          <th style="color: #0C447C;">FIFO</th>
+          <th style="color: #854F0B;">LIFO</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td>Costo de lo vendido</td>
+          <td id="r-fifo-costo">$0</td>
+          <td id="r-lifo-costo">$0</td>
+        </tr>
+        <tr>
+          <td>Ganancia neta</td>
+          <td id="r-fifo-gan">$0</td>
+          <td id="r-lifo-gan">$0</td>
+        </tr>
+        <tr>
+          <td>Valor del inventario restante</td>
+          <td id="r-fifo-inv">$0</td>
+          <td id="r-lifo-inv">$0</td>
+        </tr>
+        <tr>
+          <td>Unidades en stock</td>
+          <td id="r-fifo-stock">0</td>
+          <td id="r-lifo-stock">0</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <script src="js/app.js"></script>
+</body>
+</html>
