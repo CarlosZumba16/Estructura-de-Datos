@@ -14,6 +14,7 @@ function main() {
     console.log(sala.atenderSiguiente()); // Sale Pedro (10)
     console.log(sala.atenderSiguiente()); // Sale Ana (8)
     console.log(sala.atenderSiguiente()); // Sale María (5)
+    console.log(sala.atenderSiguiente()); // Sale María (5)
 }
 
 main();
